@@ -1,38 +1,29 @@
-# sv
+# MyTierList
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+MyTierList is a small project created to facilitate the organization of tier lists for personal use, usable completely offline
+hence without sending data to a server.
 
-## Creating a project
+## Motivations
 
-If you're seeing this, you've probably already done this step. Congrats!
+It feels to me that the most popular tools in this category focuses primarily on the sharing aspect of tier lists, while I just
+want to organize my stuff so I can have a better understanding of the games I play, for example. I also wanted to have a project
+where I could use some of the technologies I've been learning lately, such as Tailwind.
 
-```bash
-# create a new project in the current directory
-npx sv create
+## License
 
-# create a new project in my-app
-npx sv create my-app
-```
+MIT
 
-## Developing
+## Acknowledgments
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Thanks to the open-source community for the libraries and tools used in this project:
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- [Dexie](https://dexie.org/)
+- [Eslint](https://eslint.org/)
+- [Prettier](https://prettier.io/)
+- [PNPM](https://pnpm.io/)
+- [shadcn-svelte](https://github.com/huntabyte/shadcn-svelte)
+- [Svelte](https://svelte.dev/)
+- [svelte-dnd-action](https://github.com/isaacHagoel/svelte-dnd-action)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vitejs.dev/)
