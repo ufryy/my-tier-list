@@ -17,7 +17,7 @@
 		<TierListEntryLabel label={entry.label} bgColor={entry.bgColor} textColor={entry.textColor} />
 	</Resizable.Pane>
 	<ResizableHandle />
-	<Resizable.Pane>
+	<Resizable.Pane class="flex border-r-2">
 		{#each entry.items as item}
 			<TierListEntryItem {item} />
 		{/each}

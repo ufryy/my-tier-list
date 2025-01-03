@@ -9,6 +9,8 @@
 	let { tierList }: Props = $props();
 </script>
 
-{#each tierList.current.entries as entry}
-	<TierListEntry {entry} />
-{/each}
+<div class="border-y-2">
+	{#each tierList.current.entries as entry}
+		<TierListEntry {entry} />
+	{/each}
+</div>

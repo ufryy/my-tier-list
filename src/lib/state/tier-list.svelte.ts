@@ -10,9 +10,15 @@ export type TierListEntry = {
 };
 
 export type Item = {
+	id: string;
 	label: string;
 	image?: string;
 };
+
+export const emptyItem: Item = Object.freeze({
+	id: '',
+	label: ''
+});
 
 const initialTierList: TierList = {
 	entries: [
@@ -22,6 +28,7 @@ const initialTierList: TierList = {
 			textColor: 'text-white',
 			items: [
 				{
+					id: "0",
 					label: 'Test'
 				}
 			]
@@ -32,8 +39,14 @@ const initialTierList: TierList = {
 			textColor: 'text-white',
 			items: [
 				{
+					id: "1",
 					label: 'Test image',
 					image: 'https://picsum.photos/200/300'
+				},
+				{
+					id: "2",
+					label: 'Test image 2',
+					image: 'https://picsum.photos/500/400'
 				}
 			]
 		},
@@ -76,6 +89,7 @@ export class TierListController {
 
 	addItem(entryIndex: number) {
 		this.current.entries[entryIndex].items.push({
+			id: "23",
 			label: 'New Item'
 		});
 	}
