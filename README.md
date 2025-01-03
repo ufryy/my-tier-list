@@ -19,6 +19,7 @@ Thanks to the open-source community for the libraries and tools used in this pro
 
 - [Dexie](https://dexie.org/)
 - [Eslint](https://eslint.org/)
+- [Lucide](https://lucide.dev/)
 - [Prettier](https://prettier.io/)
 - [PNPM](https://pnpm.io/)
 - [shadcn-svelte](https://github.com/huntabyte/shadcn-svelte)
