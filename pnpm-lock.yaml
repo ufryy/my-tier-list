@@ -17,9 +17,6 @@ importers:
       dexie:
         specifier: ^4.0.10
         version: 4.0.10
-      lucide-svelte:
-        specifier: ^0.469.0
-        version: 0.469.0(svelte@5.16.1)
       mode-watcher:
         specifier: ^0.5.0
         version: 0.5.0(svelte@5.16.1)
@@ -63,6 +60,12 @@ importers:
       globals:
         specifier: ^15.0.0
         version: 15.14.0
+      lucide-svelte:
+        specifier: ^0.469.0
+        version: 0.469.0(svelte@5.16.1)
+      paneforge:
+        specifier: 1.0.0-next.2
+        version: 1.0.0-next.2(svelte@5.16.1)
       prettier:
         specifier: ^3.3.2
         version: 3.4.2
@@ -96,6 +99,9 @@ importers:
       typescript-eslint:
         specifier: ^8.0.0
         version: 8.19.0(eslint@9.17.0(jiti@1.21.7))(typescript@5.7.2)
+      vaul-svelte:
+        specifier: 1.0.0-next.3
+        version: 1.0.0-next.3(svelte@5.16.1)
       vite:
         specifier: ^5.4.11
         version: 5.4.11
@@ -1202,6 +1208,11 @@ packages:
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
+  paneforge@1.0.0-next.2:
+    resolution: {integrity: sha512-Z3XJDcy6qO4RsP24hKPxfFgJaZeH9ORFaudIoRIcgT3eG9ryxVr4B06zPEOzkgsWVtqLDBUr/5jzHcyf1Csuiw==}
+    peerDependencies:
+      svelte: ^5.11.0
+
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -1540,6 +1551,12 @@ packages:
       svelte:
         optional: true
 
+  svelte-toolbelt@0.4.6:
+    resolution: {integrity: sha512-k8OUvXBUifHZcAlWeY/HLg/4J0v5m2iOfOhn8fDmjt4AP8ZluaDh9eBFus9lFiLX6O5l6vKqI1dKL5wy7090NQ==}
+    engines: {node: '>=18', pnpm: '>=8.7.0'}
+    peerDependencies:
+      svelte: ^5.0.0-next.126
+
   svelte-toolbelt@0.7.0:
     resolution: {integrity: sha512-i/Tv4NwAWWqJnK5H0F8y/ubDnogDYlwwyzKhrspTUFzrFuGnYshqd2g4/R43ds841wmaFiSW/HsdsdWhPOlrAA==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
@@ -1644,6 +1661,12 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  vaul-svelte@1.0.0-next.3:
+    resolution: {integrity: sha512-bqlCc28z1I6f23Sjv5W6UlNJdAPeX8tZbYZ3+ycOn/4hTvv2fo/5Le4bAX26RyFkpT6n5FXXCZN1/uNs8biyrQ==}
+    engines: {node: '>=18', pnpm: '>=8.7.0'}
+    peerDependencies:
+      svelte: ^5.0.0
 
   vite-node@2.1.8:
     resolution: {integrity: sha512-uPAwSr57kYjAUux+8E2j0q0Fxpn8M9VoyfGiRI8Kfktz9NcYMCenwY5RnZxnF1WTu3TGiYipirIzacLL3VVGFg==}
@@ -2768,6 +2791,11 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
+  paneforge@1.0.0-next.2(svelte@5.16.1):
+    dependencies:
+      svelte: 5.16.1
+      svelte-toolbelt: 0.4.6(svelte@5.16.1)
+
   parent-module@1.0.1:
     dependencies:
       callsites: 3.1.0
@@ -3036,6 +3064,12 @@ snapshots:
     optionalDependencies:
       svelte: 5.16.1
 
+  svelte-toolbelt@0.4.6(svelte@5.16.1):
+    dependencies:
+      clsx: 2.1.1
+      style-to-object: 1.0.8
+      svelte: 5.16.1
+
   svelte-toolbelt@0.7.0(svelte@5.16.1):
     dependencies:
       clsx: 2.1.1
@@ -3162,6 +3196,12 @@ snapshots:
       punycode: 2.3.1
 
   util-deprecate@1.0.2: {}
+
+  vaul-svelte@1.0.0-next.3(svelte@5.16.1):
+    dependencies:
+      bits-ui: 1.0.0-next.76(svelte@5.16.1)
+      svelte: 5.16.1
+      svelte-toolbelt: 0.4.6(svelte@5.16.1)
 
   vite-node@2.1.8:
     dependencies:

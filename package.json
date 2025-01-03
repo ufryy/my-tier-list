@@ -28,6 +28,8 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
+		"lucide-svelte": "^0.469.0",
+		"paneforge": "1.0.0-next.2",
 		"prettier": "^3.3.2",
 		"prettier-plugin-svelte": "^3.2.6",
 		"prettier-plugin-tailwindcss": "^0.6.5",
@@ -39,6 +41,7 @@
 		"tailwindcss-animate": "^1.0.7",
 		"typescript": "^5.0.0",
 		"typescript-eslint": "^8.0.0",
+		"vaul-svelte": "1.0.0-next.3",
 		"vite": "^5.4.11",
 		"vitest": "^2.0.4"
 	},
@@ -46,7 +49,6 @@
 		"@tailwindcss/container-queries": "^0.1.1",
 		"@tailwindcss/typography": "^0.5.15",
 		"dexie": "^4.0.10",
-		"lucide-svelte": "^0.469.0",
 		"mode-watcher": "^0.5.0",
 		"svelte-dnd-action": "^0.9.54"
 	}

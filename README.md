@@ -7,7 +7,7 @@ hence without sending data to a server.
 
 It feels to me that the most popular tools in this category focuses primarily on the sharing aspect of tier lists, while I just
 want to organize my stuff so I can have a better understanding of the games I play, for example. I also wanted to have a project
-where I could use some of the technologies I've been learning lately, such as Tailwind.
+where I could use some technologies/libraries that I've never used before, such as IndexedDB, Tailwind and shadcn-svelte.
 
 ## License
 
