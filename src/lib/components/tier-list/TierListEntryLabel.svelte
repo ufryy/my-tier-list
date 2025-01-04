@@ -1,29 +1,40 @@
 <script lang="ts">
-	import * as Drawer from '../ui/drawer/index.js';
+	import { debounce } from 'es-toolkit';
 
 	type Props = {
 		label: string;
 		bgColor: string;
 		textColor: string;
+		onEditLabel: (label: string) => void;
 	};
 
-	let { label, bgColor, textColor }: Props = $props();
+	let { label, bgColor, textColor, onEditLabel }: Props = $props();
+
+	let newLabel = $state(label);
+
+	const debouncedEditLabel = debounce(editLabel, 500);
+
+	function editLabel() {
+		if (label !== newLabel) {
+			onEditLabel(newLabel);
+		}
+	}
 </script>
 
-<Drawer.Root>
-	<Drawer.Trigger
-		class="min-h-20 w-full flex-none select-none border-b-4 p-4 xs:w-32 xs:border-b-0 xs:border-r-4"
-		style="background-color: {bgColor}; color: {textColor}"
-	>
-		{label}
-	</Drawer.Trigger>
-	<Drawer.Content>
-		<Drawer.Header>
-			<Drawer.Title>Are you sure absolutely sure?</Drawer.Title>
-			<Drawer.Description>This action cannot be undone.</Drawer.Description>
-		</Drawer.Header>
-		<Drawer.Footer>
-			<Drawer.Close>Cancel</Drawer.Close>
-		</Drawer.Footer>
-	</Drawer.Content>
-</Drawer.Root>
+<div
+	class="flex min-h-20 w-full flex-none select-none items-center justify-center p-4 text-center xs:w-32"
+	style="background-color: {bgColor}; color: {textColor}"
+	contenteditable="true"
+	oninput={debouncedEditLabel}
+	bind:innerText={newLabel}
+>
+	{label}
+</div>
+
+<style>
+	div {
+		overflow-wrap: break-word;
+		white-space: normal;
+		word-break: break-word;
+	}
+</style>

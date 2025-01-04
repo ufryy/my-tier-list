@@ -9,6 +9,7 @@
 	import { toast } from 'svelte-sonner';
 	import type { Action } from 'svelte/action';
 
+	import { setCtxTierList } from '$lib/context';
 	import type { Item, TierListController, TierListEntry } from '$lib/state/tier-list.svelte';
 	import { readFileAsDataURL } from '$lib/utils';
 	import TierListEntryBox from './TierListEntry.svelte';
@@ -19,7 +20,7 @@
 
 	let { tierList }: Props = $props();
 
-	const fileReadErrorHandler = () => toast.error('Failed to read file');
+	setCtxTierList(tierList);
 
 	const makeDragDropMonitor: Action = () => {
 		const cleanup = combine(
@@ -102,10 +103,14 @@
 			}
 		};
 	};
+
+	function fileReadErrorHandler() {
+		toast.error('Failed to read file');
+	}
 </script>
 
 <div use:makeDragDropMonitor>
-	{#each tierList.current.entries as entry}
-		<TierListEntryBox {entry} />
+	{#each tierList.current.entries as entry, index}
+		<TierListEntryBox {entry} {index} />
 	{/each}
 </div>

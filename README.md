@@ -19,6 +19,7 @@ Thanks to the open-source community for the libraries and tools used in this pro
 
 - [Dexie](https://dexie.org/)
 - [Eslint](https://eslint.org/)
+- [es-toolkit](https://es-toolkit.slash.page/)
 - [Lucide](https://lucide.dev/)
 - [PNPM](https://pnpm.io/)
 - [Pragmatic Drag & Drop by Atlassian](https://github.com/atlassian/pragmatic-drag-and-drop)

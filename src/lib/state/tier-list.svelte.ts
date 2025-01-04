@@ -77,6 +77,12 @@ export class TierListController {
 		});
 	}
 
+	editEntry(index: number, entry: Partial<Omit<TierListEntry, 'id' | 'items'>>) {
+		// @ts-expect-error id and items are not allowed, this is enforced
+		const { id: _, items: __, ..._entry } = entry;
+		this.current.entries[index] = { ...this.current.entries[index], ..._entry };
+	}
+
 	removeEntry(index: number) {
 		this.current.entries.splice(index, 1);
 	}
