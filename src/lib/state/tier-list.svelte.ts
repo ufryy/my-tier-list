@@ -1,8 +1,11 @@
+import { nanoid } from 'nanoid';
+
 export type TierList = {
 	entries: TierListEntry[];
 };
 
 export type TierListEntry = {
+	id: string;
 	label: string;
 	bgColor: string;
 	textColor: string;
@@ -23,49 +26,54 @@ export const emptyItem: Item = Object.freeze({
 const initialTierList: TierList = {
 	entries: [
 		{
+			id: nanoid(),
 			label: 'S',
-			bgColor: 'bg-red-700',
-			textColor: 'text-white',
+			bgColor: '#B91C1C',
+			textColor: '#ffffff',
 			items: [
 				{
-					id: "0",
+					id: nanoid(),
 					label: 'Test'
 				}
 			]
 		},
 		{
+			id: nanoid(),
 			label: 'A',
-			bgColor: 'bg-yellow-700',
-			textColor: 'text-white',
+			bgColor: '#A16207',
+			textColor: '#ffffff',
 			items: [
 				{
-					id: "1",
+					id: nanoid(),
 					label: 'Test image',
 					image: 'https://picsum.photos/200/300'
 				},
 				{
-					id: "2",
+					id: nanoid(),
 					label: 'Test image 2',
 					image: 'https://picsum.photos/500/400'
 				}
 			]
 		},
 		{
+			id: nanoid(),
 			label: 'B',
-			bgColor: 'bg-green-700',
-			textColor: 'text-white',
+			bgColor: '#4d7c0f',
+			textColor: '#ffffff',
 			items: []
 		},
 		{
+			id: nanoid(),
 			label: 'C',
-			bgColor: 'bg-blue-700',
-			textColor: 'text-white',
+			bgColor: '#1d4ed8',
+			textColor: '#ffffff',
 			items: []
 		},
 		{
+			id: nanoid(),
 			label: 'D',
-			bgColor: 'bg-purple-700',
-			textColor: 'text-white',
+			bgColor: '#7e22ce',
+			textColor: '#ffffff',
 			items: []
 		}
 	]
@@ -76,9 +84,10 @@ export class TierListController {
 
 	addEntry() {
 		this.current.entries.push({
+			id: nanoid(),
 			label: 'New Tier',
 			bgColor: 'bg-gray-700',
-			textColor: 'text-white',
+			textColor: '#ffffff',
 			items: []
 		});
 	}
@@ -89,12 +98,24 @@ export class TierListController {
 
 	addItem(entryIndex: number) {
 		this.current.entries[entryIndex].items.push({
-			id: "23",
+			id: nanoid(),
 			label: 'New Item'
 		});
 	}
 
 	removeItem(entryIndex: number, itemIndex: number) {
 		this.current.entries[entryIndex].items.splice(itemIndex, 1);
+	}
+
+	moveItem(item: Item, from: TierListEntry, to: TierListEntry) {
+		const fromEntry = this.current.entries.find((e) => e.id === from.id);
+		const toEntry = this.current.entries.find((e) => e.id === to.id);
+
+		if (!fromEntry || !toEntry) {
+			return;
+		}
+
+		fromEntry.items = from.items.filter((i) => i.id !== item.id);
+		toEntry.items.push(item);
 	}
 }

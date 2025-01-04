@@ -8,13 +8,15 @@
 	};
 
 	let { label, bgColor, textColor }: Props = $props();
-
-	const bg = $derived(bgColor.startsWith('bg-') ? bgColor : `bg-[${bgColor}]`);
-	const text = $derived(textColor.startsWith('text-') ? textColor : `text-[${textColor}]`);
 </script>
 
 <Drawer.Root>
-	<Drawer.Trigger class="h-full min-h-20 w-full border-x-2 p-4 {bg} {text}">{label}</Drawer.Trigger>
+	<Drawer.Trigger
+		class="h-full min-h-20 w-full border-x-2 p-4"
+		style="background-color: {bgColor}; color: {textColor}"
+	>
+		{label}
+	</Drawer.Trigger>
 	<Drawer.Content>
 		<Drawer.Header>
 			<Drawer.Title>Are you sure absolutely sure?</Drawer.Title>

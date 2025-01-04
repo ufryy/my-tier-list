@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { draggable, type DragEventData } from '@neodrag/svelte';
+	import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+	import type { Action } from 'svelte/action';
 
 	import type { Item } from '$lib/state/tier-list.svelte';
 
@@ -9,20 +10,30 @@
 
 	let { item }: Props = $props();
 
-	function onDragging(e: CustomEvent<DragEventData>) {
-		console.debug('dragging', e.detail);
-	}
+	let dragging = $state(false);
 
-	function onDragEnd(e: CustomEvent<DragEventData>) {
-		e.detail.rootNode.style.removeProperty('translate');
-	}
+	const makeDraggable: Action = (element) => {
+		const cleanup = draggable({
+			element,
+			getInitialData: () => ({ item: $state.snapshot(item) }),
+			onDragStart: () => (dragging = true),
+			onDrop: () => (dragging = false)
+		});
+
+		return {
+			destroy() {
+				cleanup();
+			}
+		};
+	};
 </script>
 
 <div
-	class="flex h-20 w-20 items-center justify-center overflow-hidden text-center"
-	use:draggable={{ bounds: document.body, ignoreMultitouch: true }}
-	on:neodrag={onDragging}
-	on:neodrag:end={onDragEnd}
+	class={[
+		'flex h-20 w-20 items-center justify-center overflow-hidden text-center',
+		dragging && 'opacity-50 saturate-0'
+	]}
+	use:makeDraggable
 >
 	{#if item.image}
 		<img
