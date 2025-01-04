@@ -85,11 +85,12 @@ export class TierListController {
 		this.staging.push({ id, label, image });
 	}
 
-	addItem(entryIndex: number) {
-		this.current.entries[entryIndex].items.push({
-			id: nanoid(),
-			label: 'New Item'
-		});
+	addItem(entry: TierListEntry, { id = nanoid(), label = 'New item', image }: Partial<Item>) {
+		const entryIndex = this.current.entries.findIndex((e) => e.id === entry.id);
+		if (entryIndex === -1) {
+			return;
+		}
+		this.current.entries[entryIndex].items.push({ id, label, image });
 	}
 
 	removeItem(entryIndex: number, itemIndex: number) {

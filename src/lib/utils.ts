@@ -18,3 +18,12 @@ export function isValidUrl(urlString: string): boolean {
 	); // validate fragment locator
 	return !!urlPattern.test(urlString);
 }
+
+export function readFileAsDataURL(file: File): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result as string);
+		reader.onerror = reject;
+		reader.readAsDataURL(file);
+	});
+}

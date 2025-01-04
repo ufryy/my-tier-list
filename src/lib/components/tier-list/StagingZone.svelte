@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 	import { dropTargetForElements } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+	import { dropTargetForExternal } from '@atlaskit/pragmatic-drag-and-drop/external/adapter';
+	import { toast } from 'svelte-sonner';
 	import type { Action } from 'svelte/action';
 
 	import type { TierListController } from '$lib/state/tier-list.svelte';
-	import { isValidUrl } from '$lib/utils';
+	import { isValidUrl, readFileAsDataURL } from '$lib/utils';
 	import TierListItem from './TierListItem.svelte';
 
 	type Props = {
@@ -17,18 +20,16 @@
 
 		for (const clipboardItem of e.clipboardData?.files ?? []) {
 			if (clipboardItem.type.startsWith('image/')) {
-				const reader = new FileReader();
-				reader.addEventListener(
-					'load',
-					() => {
+				readFileAsDataURL(clipboardItem)
+					.then((dataUrl) => {
 						tierList.addStagingItem({
 							label: clipboardItem.name,
-							image: reader.result as string
+							image: dataUrl
 						});
-					},
-					false
-				);
-				reader.readAsDataURL(clipboardItem);
+					})
+					.catch(() => {
+						toast.error('Failed to read file');
+					});
 			}
 		}
 
@@ -42,10 +43,16 @@
 	}
 
 	const makeStagingDropZone: Action = (element) => {
-		const cleanup = dropTargetForElements({
-			element,
-			getData: () => ({ staging: true })
-		});
+		const cleanup = combine(
+			dropTargetForElements({
+				element,
+				getData: () => ({ staging: true })
+			}),
+			dropTargetForExternal({
+				element,
+				getData: () => ({ staging: true })
+			})
+		);
 
 		return {
 			destroy() {
@@ -67,6 +74,6 @@
 	{#each tierList.staging as item}
 		<TierListItem {item} />
 	{:else}
-		<p class="text-center m-auto text-slate-600 text-lg">Paste or drop an image or URL</p>
+		<p class="text-center m-auto text-slate-600 text-lg">Paste or drop here an image or URL</p>
 	{/each}
 </section>
