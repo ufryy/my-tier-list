@@ -42,7 +42,7 @@
 </script>
 
 <section
-	class="min-h-22 flex h-full w-full flex-wrap border border-transparent"
+	class="flex h-full min-h-22 w-full flex-1 flex-wrap border border-transparent"
 	style={draggedOver ? `border-color: ${entry.bgColor}` : ''}
 	use:makeDropZone
 >

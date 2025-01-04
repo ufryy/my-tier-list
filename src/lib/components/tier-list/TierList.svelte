@@ -104,7 +104,7 @@
 	};
 </script>
 
-<div class="border-y-2" use:makeDragDropMonitor>
+<div use:makeDragDropMonitor>
 	{#each tierList.current.entries as entry}
 		<TierListEntryBox {entry} />
 	{/each}

@@ -90,6 +90,9 @@ const config: Config = {
 			},
 			spacing: {
 				'22': '5.125rem'
+			},
+			screens: {
+				xs: '375px'
 			}
 		}
 	},
