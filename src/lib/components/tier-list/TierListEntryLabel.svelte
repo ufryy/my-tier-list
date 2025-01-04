@@ -12,7 +12,7 @@
 
 <Drawer.Root>
 	<Drawer.Trigger
-		class="h-full min-h-20 w-full border-x-2 p-4"
+		class="h-full min-h-20 w-full select-none border-x-2 p-4"
 		style="background-color: {bgColor}; color: {textColor}"
 	>
 		{label}
