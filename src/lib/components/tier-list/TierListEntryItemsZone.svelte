@@ -3,7 +3,7 @@
 	import type { Action } from 'svelte/action';
 
 	import type { TierListEntry } from '$lib/state/tier-list.svelte';
-	import TierListEntryItem from './TierListEntryItem.svelte';
+	import TierListItem from './TierListItem.svelte';
 
 	type Props = {
 		entry: TierListEntry;
@@ -36,6 +36,6 @@
 	use:makeDropZone
 >
 	{#each entry.items as item}
-		<TierListEntryItem {item} />
+		<TierListItem {item} />
 	{/each}
 </section>

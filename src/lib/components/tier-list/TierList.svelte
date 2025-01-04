@@ -25,10 +25,22 @@
 					return;
 				}
 
-				console.debug({ source, location });
-				const startEntry = startTargets[0].data.entry as TierListEntry;
-				const destEntry = destTargets[0].data.entry as TierListEntry;
-				tierList.moveItem(source.data.item as Item, startEntry, destEntry);
+				const startData = startTargets[0].data;
+				const destData = destTargets[0].data;
+
+				if (startData.staging) {
+					const entry = destData.entry as TierListEntry;
+					tierList.moveFromStaging(source.data.item as Item, entry);
+					return;
+				} else if (destData.staging) {
+					const entry = startData.entry as TierListEntry;
+					tierList.moveToStaging(source.data.item as Item, entry);
+					return;
+				} else {
+					const startEntry = startData.entry as TierListEntry;
+					const destEntry = destData.entry as TierListEntry;
+					tierList.moveItem(source.data.item as Item, startEntry, destEntry);
+				}
 			}
 		});
 

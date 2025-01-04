@@ -31,7 +31,7 @@
 <div
 	class={[
 		'flex h-20 w-20 items-center justify-center overflow-hidden text-center',
-		dragging && 'opacity-50 saturate-0'
+		dragging && 'cursor-grab opacity-50 saturate-0'
 	]}
 	use:makeDraggable
 >

@@ -30,30 +30,14 @@ const initialTierList: TierList = {
 			label: 'S',
 			bgColor: '#B91C1C',
 			textColor: '#ffffff',
-			items: [
-				{
-					id: nanoid(),
-					label: 'Test'
-				}
-			]
+			items: []
 		},
 		{
 			id: nanoid(),
 			label: 'A',
 			bgColor: '#A16207',
 			textColor: '#ffffff',
-			items: [
-				{
-					id: nanoid(),
-					label: 'Test image',
-					image: 'https://picsum.photos/200/300'
-				},
-				{
-					id: nanoid(),
-					label: 'Test image 2',
-					image: 'https://picsum.photos/500/400'
-				}
-			]
+			items: []
 		},
 		{
 			id: nanoid(),
@@ -81,6 +65,7 @@ const initialTierList: TierList = {
 
 export class TierListController {
 	current: TierList = $state({ ...initialTierList });
+	staging: Item[] = $state([]);
 
 	addEntry() {
 		this.current.entries.push({
@@ -94,6 +79,10 @@ export class TierListController {
 
 	removeEntry(index: number) {
 		this.current.entries.splice(index, 1);
+	}
+
+	addStagingItem({ id = nanoid(), label = 'New item', image }: Partial<Item>) {
+		this.staging.push({ id, label, image });
 	}
 
 	addItem(entryIndex: number) {
@@ -117,5 +106,27 @@ export class TierListController {
 
 		fromEntry.items = from.items.filter((i) => i.id !== item.id);
 		toEntry.items.push(item);
+	}
+
+	moveFromStaging(item: Item, to: TierListEntry) {
+		const toEntry = this.current.entries.find((e) => e.id === to.id);
+
+		if (!toEntry) {
+			return;
+		}
+
+		this.staging = this.staging.filter((i) => i.id !== item.id);
+		toEntry.items.push(item);
+	}
+
+	moveToStaging(item: Item, from: TierListEntry) {
+		const fromEntry = this.current.entries.find((e) => e.id === from.id);
+
+		if (!fromEntry) {
+			return;
+		}
+
+		fromEntry.items = fromEntry.items.filter((i) => i.id !== item.id);
+		this.staging.push(item);
 	}
 }
