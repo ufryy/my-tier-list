@@ -110,7 +110,7 @@
 </script>
 
 <div use:makeDragDropMonitor>
-	{#each tierList.current.entries as entry, index}
+	{#each tierList.current.entries as entry, index (entry.id)}
 		<TierListEntryBox {entry} {index} />
 	{/each}
 </div>

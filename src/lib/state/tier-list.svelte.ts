@@ -12,6 +12,8 @@ export type TierListEntry = {
 	items: Item[];
 };
 
+export type TierListEntryPosition = 'first' | 'middle' | 'last';
+
 export type Item = {
 	id: string;
 	label: string;
@@ -81,6 +83,35 @@ export class TierListController {
 		// @ts-expect-error id and items are not allowed, this is enforced
 		const { id: _, items: __, ..._entry } = entry;
 		this.current.entries[index] = { ...this.current.entries[index], ..._entry };
+	}
+
+	moveEntry(from: number, to: number) {
+		if (
+			from === to ||
+			from < 0 ||
+			to < 0 ||
+			from >= this.current.entries.length ||
+			to >= this.current.entries.length
+		) {
+			return;
+		}
+
+		const entry = this.current.entries[from];
+		if (from < to) {
+			this.current.entries = [
+				...this.current.entries.slice(0, from),
+				...this.current.entries.slice(from + 1, to + 1),
+				entry,
+				...this.current.entries.slice(to + 1)
+			];
+		} else {
+			this.current.entries = [
+				...this.current.entries.slice(0, to),
+				entry,
+				...this.current.entries.slice(to, from),
+				...this.current.entries.slice(from + 1)
+			];
+		}
 	}
 
 	removeEntry(index: number) {

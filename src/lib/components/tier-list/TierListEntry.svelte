@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { getCtxTierList } from '$lib/context';
-	import type { TierListController, TierListEntry } from '$lib/state/tier-list.svelte';
+	import type {
+		TierListController,
+		TierListEntry,
+		TierListEntryPosition
+	} from '$lib/state/tier-list.svelte';
 	import TierListEntryItemsZone from './TierListEntryItemsZone.svelte';
 	import TierListEntryLabel from './TierListEntryLabel.svelte';
 
@@ -12,9 +16,20 @@
 	let { entry, index }: Props = $props();
 
 	const tierList: TierListController = getCtxTierList();
+	const position: TierListEntryPosition = $derived(
+		index === 0 ? 'first' : index === tierList.current.entries.length - 1 ? 'last' : 'middle'
+	);
 
 	function onEditLabel(label: string) {
 		tierList.editEntry(index, { label });
+	}
+
+	function onMoveUp() {
+		tierList.moveEntry(index, index - 1);
+	}
+
+	function onMoveDown() {
+		tierList.moveEntry(index, index + 1);
 	}
 </script>
 
@@ -23,7 +38,10 @@
 		label={entry.label}
 		bgColor={entry.bgColor}
 		textColor={entry.textColor}
+		{position}
 		{onEditLabel}
+		{onMoveDown}
+		{onMoveUp}
 	/>
 	<div aria-hidden="true" class="border-2"></div>
 	<TierListEntryItemsZone {entry} />
