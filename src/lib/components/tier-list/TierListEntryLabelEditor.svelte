@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { debounce } from 'es-toolkit';
-	import { ChevronDown, ChevronUp } from 'lucide-svelte';
+	import { ChevronDown, ChevronUp, Trash2 } from 'lucide-svelte';
 	import { MediaQuery } from 'svelte/reactivity';
 
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
@@ -21,6 +21,7 @@
 		onEditTextColor: (color: string) => void;
 		onMoveUp: () => void;
 		onMoveDown: () => void;
+		onDelete: () => void;
 	};
 
 	let {
@@ -32,7 +33,8 @@
 		onEditBgColor,
 		onEditTextColor,
 		onMoveDown,
-		onMoveUp
+		onMoveUp,
+		onDelete
 	}: Props = $props();
 
 	let newLabel = $state(label);
@@ -49,21 +51,23 @@
 </script>
 
 {#snippet editor()}
-	<form class="mt-4 grid items-start gap-4">
+	<form
+		class="mt-4 grid items-start gap-4"
+		onsubmit={(e) => {
+			e.preventDefault();
+			open = false;
+		}}
+	>
 		<div class="grid gap-2">
 			<Label for="label">Label</Label>
 			<Input type="text" id="label" bind:value={newLabel} onchange={debouncedEditLabel} />
 		</div>
-		<div>
-			<ColorPicker hex={bgColor} variant="outline" class="w-full" onColorChange={onEditBgColor}>
-				Change background color
-			</ColorPicker>
-		</div>
-		<div>
-			<ColorPicker hex={textColor} variant="outline" class="w-full" onColorChange={onEditTextColor}>
-				Change label color
-			</ColorPicker>
-		</div>
+		<ColorPicker hex={bgColor} variant="outline" class="w-full" onColorChange={onEditBgColor}>
+			Change background color
+		</ColorPicker>
+		<ColorPicker hex={textColor} variant="outline" class="w-full" onColorChange={onEditTextColor}>
+			Change label color
+		</ColorPicker>
 		<div class="flex items-center gap-4">
 			<Button
 				type="button"
@@ -86,6 +90,18 @@
 				Move down
 			</Button>
 		</div>
+		<Button
+			type="button"
+			variant="destructive"
+			class="w-full"
+			onclick={() => {
+				onDelete();
+				open = false;
+			}}
+		>
+			<Trash2 class="h-4 w-4" />
+			Delete tier
+		</Button>
 	</form>
 {/snippet}
 

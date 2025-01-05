@@ -6,7 +6,7 @@
 	import { toggleMode } from 'mode-watcher';
 </script>
 
-<nav class="flex justify-between items-center py-4">
+<nav class="header sticky top-0 flex items-center justify-between pt-4 pb-8">
 	<a href="/" class="text-lg font-extrabold">MyTierList</a>
 
 	<div>

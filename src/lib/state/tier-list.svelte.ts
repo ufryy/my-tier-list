@@ -25,44 +25,36 @@ export const emptyItem: Item = Object.freeze({
 	label: ''
 });
 
+type Palette = [string, string][];
+
+const basicPalette1: Palette = [
+	['#F24722', '#FFFFFF'],
+	['#FEA629', '#000000'],
+	['#FFCD2A', '#000000'],
+	['#13AE5C', '#FFFFFF'],
+	['#0B99FF', '#FFFFFF'],
+	['#9847FF', '#FFFFFF'],
+	['#FB47FF', '#FFFFFF']
+];
+
+const basicPalette2: Palette = [
+	['#FF7F7F', '#000000'],
+	['#FFBF7F', '#000000'],
+	['#FFDF80', '#000000'],
+	['#FFFF7F', '#000000'],
+	['#BFFF7F', '#000000'],
+	['#7FFF7F', '#000000'],
+	['#7FD6FF', '#000000']
+];
+
 const initialTierList: TierList = {
-	entries: [
-		{
-			id: nanoid(),
-			label: 'S',
-			bgColor: '#B91C1C',
-			textColor: '#ffffff',
-			items: []
-		},
-		{
-			id: nanoid(),
-			label: 'A',
-			bgColor: '#A16207',
-			textColor: '#ffffff',
-			items: []
-		},
-		{
-			id: nanoid(),
-			label: 'B',
-			bgColor: '#4d7c0f',
-			textColor: '#ffffff',
-			items: []
-		},
-		{
-			id: nanoid(),
-			label: 'C',
-			bgColor: '#1d4ed8',
-			textColor: '#ffffff',
-			items: []
-		},
-		{
-			id: nanoid(),
-			label: 'D',
-			bgColor: '#7e22ce',
-			textColor: '#ffffff',
-			items: []
-		}
-	]
+	entries: basicPalette2.map(([bgColor, textColor], index) => ({
+		id: nanoid(),
+		label: index === 0 ? 'S' : String.fromCharCode(65 + index - 1),
+		bgColor,
+		textColor,
+		items: []
+	}))
 };
 
 export class TierListController {
@@ -114,7 +106,8 @@ export class TierListController {
 		}
 	}
 
-	removeEntry(index: number) {
+	deleteEntry(index: number) {
+		this.staging.push(...this.current.entries[index].items);
 		this.current.entries.splice(index, 1);
 	}
 

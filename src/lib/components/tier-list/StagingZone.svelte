@@ -66,7 +66,7 @@
 
 <section
 	class={[
-		'flex min-h-40 w-full flex-wrap border-4 border-dashed',
+		'flex min-h-60 w-full flex-wrap border-4 border-dashed',
 		!tierList.staging.length && 'items-center justify-center'
 	]}
 	use:makeStagingDropZone

@@ -6,7 +6,7 @@
 		TierListEntryPosition
 	} from '$lib/state/tier-list.svelte';
 	import TierListEntryItemsZone from './TierListEntryItemsZone.svelte';
-	import TierListEntryLabel from './TierListEntryLabel.svelte';
+	import TierListEntryLabelEditor from './TierListEntryLabelEditor.svelte';
 
 	type Props = {
 		entry: TierListEntry;
@@ -39,10 +39,14 @@
 	function onMoveDown() {
 		tierList.moveEntry(index, index + 1);
 	}
+
+	function onDelete() {
+		tierList.deleteEntry(index);
+	}
 </script>
 
 <section class="flex flex-col border-4 border-t-0 first:border-t-4 xs:flex-row">
-	<TierListEntryLabel
+	<TierListEntryLabelEditor
 		label={entry.label}
 		bgColor={entry.bgColor}
 		textColor={entry.textColor}
@@ -52,6 +56,7 @@
 		{onEditTextColor}
 		{onMoveDown}
 		{onMoveUp}
+		{onDelete}
 	/>
 	<div aria-hidden="true" class="border-2"></div>
 	<TierListEntryItemsZone {entry} />

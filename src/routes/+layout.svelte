@@ -8,7 +8,7 @@
 </script>
 
 <ModeWatcher />
-<main class="container">
+<main class="container pb-10">
 	<Header />
 	{@render children()}
 </main>
