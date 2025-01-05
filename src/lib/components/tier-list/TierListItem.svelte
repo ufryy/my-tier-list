@@ -2,7 +2,7 @@
 	import { draggable } from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 	import type { Action } from 'svelte/action';
 
-	import type { Item } from '$lib/state/tier-list.svelte';
+	import type { Item } from '$lib/data/types';
 
 	type Props = {
 		item: Item;

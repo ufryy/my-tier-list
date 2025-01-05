@@ -5,7 +5,7 @@
 	import { toast } from 'svelte-sonner';
 	import type { Action } from 'svelte/action';
 
-	import type { TierListController } from '$lib/state/tier-list.svelte';
+	import type { TierListController } from '$lib/data/tier-list.svelte';
 	import { isValidUrl, readFileAsDataURL } from '$lib/utils';
 	import TierListItem from './TierListItem.svelte';
 

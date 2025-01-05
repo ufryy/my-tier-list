@@ -8,7 +8,7 @@
 	import * as Drawer from '$lib/components/ui/drawer/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
-	import type { TierListEntryPosition } from '$lib/state/tier-list.svelte';
+	import type { TierListEntryPosition } from '$lib/data/types';
 	import ColorPicker from '../ui/ColorPicker.svelte';
 
 	type Props = {

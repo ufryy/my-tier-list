@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte';
 
-import { TierListController } from './state/tier-list.svelte';
+import { TierListController } from './data/tier-list.svelte';
 
 const CTX_TIER_LIST = Symbol('CTX_TIER_LIST');
 

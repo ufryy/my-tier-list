@@ -4,14 +4,14 @@
 	import { dropTargetForExternal } from '@atlaskit/pragmatic-drag-and-drop/external/adapter';
 	import type { Action } from 'svelte/action';
 
-	import type { TierListEntry } from '$lib/state/tier-list.svelte';
 	import TierListItem from './TierListItem.svelte';
+	import type { Tier } from '$lib/data/types';
 
 	type Props = {
-		entry: TierListEntry;
+		tier: Tier;
 	};
 
-	let { entry }: Props = $props();
+	let { tier }: Props = $props();
 
 	let draggedOver = $state(false);
 
@@ -19,14 +19,14 @@
 		const cleanup = combine(
 			dropTargetForElements({
 				element,
-				getData: () => ({ entry: $state.snapshot(entry) }),
+				getData: () => ({ tier: $state.snapshot(tier) }),
 				onDragEnter: () => (draggedOver = true),
 				onDragLeave: () => (draggedOver = false),
 				onDrop: () => (draggedOver = false)
 			}),
 			dropTargetForExternal({
 				element,
-				getData: () => ({ entry: $state.snapshot(entry) }),
+				getData: () => ({ tier: $state.snapshot(tier) }),
 				onDragEnter: () => (draggedOver = true),
 				onDragLeave: () => (draggedOver = false),
 				onDrop: () => (draggedOver = false)
@@ -43,10 +43,10 @@
 
 <section
 	class="flex h-full min-h-22 w-full flex-1 flex-wrap border border-transparent"
-	style={draggedOver ? `border-color: ${entry.bgColor}` : ''}
+	style={draggedOver ? `border-color: ${tier.bgColor}` : ''}
 	use:makeDropZone
 >
-	{#each entry.items as item}
+	{#each tier.items as item}
 		<TierListItem {item} />
 	{/each}
 </section>

@@ -10,9 +10,10 @@
 	import type { Action } from 'svelte/action';
 
 	import { setCtxTierList } from '$lib/context';
-	import type { Item, TierListController, TierListEntry } from '$lib/state/tier-list.svelte';
+	import type { TierListController } from '$lib/data/tier-list.svelte';
+	import type { Item, Tier } from '$lib/data/types';
 	import { readFileAsDataURL } from '$lib/utils';
-	import TierListEntryBox from './TierListEntry.svelte';
+	import TierRow from './TierRow.svelte';
 
 	type Props = {
 		tierList: TierListController;
@@ -41,17 +42,15 @@
 					const destData = destTargets[0].data;
 
 					if (startData.staging) {
-						const entry = destData.entry as TierListEntry;
-						tierList.moveFromStaging(source.data.item as Item, entry);
-						return;
+						const tier = destData.tier as Tier;
+						tierList.moveFromStaging(source.data.item as Item, tier.id);
 					} else if (destData.staging) {
-						const entry = startData.entry as TierListEntry;
-						tierList.moveToStaging(source.data.item as Item, entry);
-						return;
+						const tier = startData.tier as Tier;
+						tierList.moveToStaging(source.data.item as Item, tier.id);
 					} else {
-						const startEntry = startData.entry as TierListEntry;
-						const destEntry = destData.entry as TierListEntry;
-						tierList.moveItem(source.data.item as Item, startEntry, destEntry);
+						const startTier = startData.tier as Tier;
+						const destTier = destData.tier as Tier;
+						tierList.moveItem(source.data.item as Item, startTier.id, destTier.id);
 					}
 				}
 			}),
@@ -80,12 +79,12 @@
 								})
 								.catch(fileReadErrorHandler);
 						}
-					} else if (destTargets[0].data.entry) {
-						const entry = destTargets[0].data.entry as TierListEntry;
+					} else if (destTargets[0].data.tier) {
+						const tier = destTargets[0].data.tier as Tier;
 						for (const file of files) {
 							readFileAsDataURL(file)
 								.then((image) => {
-									tierList.addItem(entry, {
+									tierList.addItem(tier.id, {
 										label: file.name,
 										image
 									});
@@ -110,7 +109,7 @@
 </script>
 
 <div use:makeDragDropMonitor>
-	{#each tierList.current.entries as entry, index (entry.id)}
-		<TierListEntryBox {entry} {index} />
+	{#each tierList.tiers as tier, index (tier.id)}
+		<TierRow {tier} {index} />
 	{/each}
 </div>

@@ -1,23 +1,20 @@
 <script lang="ts">
 	import { getCtxTierList } from '$lib/context';
-	import type {
-		TierListController,
-		TierListEntry,
-		TierListEntryPosition
-	} from '$lib/state/tier-list.svelte';
-	import TierListEntryItemsZone from './TierListEntryItemsZone.svelte';
-	import TierListEntryLabelEditor from './TierListEntryLabelEditor.svelte';
+	import type { TierListController } from '$lib/data/tier-list.svelte';
+	import type { Tier, TierListEntryPosition } from '$lib/data/types';
+	import TierRowItems from './TierRowItems.svelte';
+	import TierRowLabelEditor from './TierRowLabelEditor.svelte';
 
 	type Props = {
-		entry: TierListEntry;
+		tier: Tier;
 		index: number;
 	};
 
-	let { entry, index }: Props = $props();
+	let { tier, index }: Props = $props();
 
 	const tierList: TierListController = getCtxTierList();
 	const position: TierListEntryPosition = $derived(
-		index === 0 ? 'first' : index === tierList.current.entries.length - 1 ? 'last' : 'middle'
+		index === 0 ? 'first' : index === tierList.tiers.length - 1 ? 'last' : 'middle'
 	);
 
 	function onEditLabel(label: string) {
@@ -46,10 +43,10 @@
 </script>
 
 <section class="flex flex-col border-4 border-t-0 first:border-t-4 xs:flex-row">
-	<TierListEntryLabelEditor
-		label={entry.label}
-		bgColor={entry.bgColor}
-		textColor={entry.textColor}
+	<TierRowLabelEditor
+		label={tier.label}
+		bgColor={tier.bgColor}
+		textColor={tier.textColor}
 		{position}
 		{onEditLabel}
 		{onEditBgColor}
@@ -59,5 +56,5 @@
 		{onDelete}
 	/>
 	<div aria-hidden="true" class="border-2"></div>
-	<TierListEntryItemsZone {entry} />
+	<TierRowItems {tier} />
 </section>
