@@ -9,6 +9,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import type { TierListEntryPosition } from '$lib/state/tier-list.svelte';
+	import ColorPicker from '../ui/ColorPicker.svelte';
 
 	type Props = {
 		label: string;
@@ -16,11 +17,23 @@
 		textColor: string;
 		position: TierListEntryPosition;
 		onEditLabel: (label: string) => void;
+		onEditBgColor: (color: string) => void;
+		onEditTextColor: (color: string) => void;
 		onMoveUp: () => void;
 		onMoveDown: () => void;
 	};
 
-	let { label, bgColor, textColor, position, onEditLabel, onMoveDown, onMoveUp }: Props = $props();
+	let {
+		label,
+		bgColor,
+		textColor,
+		position,
+		onEditLabel,
+		onEditBgColor,
+		onEditTextColor,
+		onMoveDown,
+		onMoveUp
+	}: Props = $props();
 
 	let newLabel = $state(label);
 	let open = $state(false);
@@ -40,6 +53,16 @@
 		<div class="grid gap-2">
 			<Label for="label">Label</Label>
 			<Input type="text" id="label" bind:value={newLabel} onchange={debouncedEditLabel} />
+		</div>
+		<div>
+			<ColorPicker hex={bgColor} variant="outline" class="w-full" onColorChange={onEditBgColor}>
+				Change background color
+			</ColorPicker>
+		</div>
+		<div>
+			<ColorPicker hex={textColor} variant="outline" class="w-full" onColorChange={onEditTextColor}>
+				Change label color
+			</ColorPicker>
 		</div>
 		<div class="flex items-center gap-4">
 			<Button
@@ -105,11 +128,3 @@
 		</Drawer.Content>
 	</Drawer.Root>
 {/if}
-
-<style>
-	/* div {
-		overflow-wrap: break-word;
-		white-space: normal;
-		word-break: break-word;
-	} */
-</style>

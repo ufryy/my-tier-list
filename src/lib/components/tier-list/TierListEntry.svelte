@@ -24,6 +24,14 @@
 		tierList.editEntry(index, { label });
 	}
 
+	function onEditBgColor(color: string) {
+		tierList.editEntry(index, { bgColor: color });
+	}
+
+	function onEditTextColor(color: string) {
+		tierList.editEntry(index, { textColor: color });
+	}
+
 	function onMoveUp() {
 		tierList.moveEntry(index, index - 1);
 	}
@@ -40,6 +48,8 @@
 		textColor={entry.textColor}
 		{position}
 		{onEditLabel}
+		{onEditBgColor}
+		{onEditTextColor}
 		{onMoveDown}
 		{onMoveUp}
 	/>
