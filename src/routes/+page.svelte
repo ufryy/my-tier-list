@@ -8,7 +8,7 @@
 	const tierList = new TierListController(db);
 </script>
 
-<div class="flex flex-col gap-10">
+<div class="flex flex-col gap-20">
 	<TierList {tierList} />
 	<StagingZone {tierList} />
 </div>

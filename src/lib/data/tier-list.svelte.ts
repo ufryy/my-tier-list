@@ -116,6 +116,7 @@ export class TierListController {
 
 	addStagingItem({ id = nanoid(), label = 'New item', image }: Partial<Item>) {
 		this.#staging.push({ id, label, image });
+		this.#save('staging');
 	}
 
 	addItem(tierId: string, { id = nanoid(), label = 'New item', image }: Partial<Item>) {
@@ -127,8 +128,27 @@ export class TierListController {
 		this.#save('tiers');
 	}
 
-	removeItem(entryIndex: number, itemIndex: number) {
-		this.#tiers[entryIndex].items.splice(itemIndex, 1);
+	/**
+	 * Deletes a tier list item from the staging area or a specific tier, if provided
+	 * @param itemId Id of the item to be deleted
+	 * @param entryIndex Optional index of the tier where the item is located, if not provided the item is searched in the staging area
+	 * @returns
+	 */
+	deleteItem(itemId: string, entryIndex?: number) {
+		if (entryIndex) {
+			const itemIndex = this.#tiers[entryIndex].items.findIndex((i) => i.id === itemId);
+			if (itemIndex === -1) {
+				return;
+			}
+			this.#tiers[entryIndex].items.splice(itemIndex, 1);
+		} else {
+			const itemIndex = this.staging.findIndex((i) => i.id === itemId);
+			if (itemIndex === -1) {
+				return;
+			}
+			this.#staging.splice(itemIndex, 1);
+		}
+
 		this.#save('tiers');
 	}
 

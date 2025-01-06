@@ -6,7 +6,8 @@
 	import type { Action } from 'svelte/action';
 
 	import type { TierListController } from '$lib/data/tier-list.svelte';
-	import { isValidUrl, readFileAsDataURL } from '$lib/utils';
+	import { readFileAsDataURL, testImageURL } from '$lib/utils/files';
+	import { isValidUrl } from '$lib/utils/strings';
 	import TierListItem from './TierListItem.svelte';
 
 	type Props = {
@@ -35,9 +36,15 @@
 
 		const url = e.clipboardData?.getData('text/plain');
 		if (url && isValidUrl(url)) {
-			tierList.addStagingItem({
-				label: '',
-				image: url
+			testImageURL(url).then((ok) => {
+				if (ok) {
+					tierList.addStagingItem({
+						label: '',
+						image: url
+					});
+				} else {
+					toast.error('Invalid image URL');
+				}
 			});
 		}
 	}
@@ -66,14 +73,20 @@
 
 <section
 	class={[
-		'flex min-h-60 w-full flex-wrap border-4 border-dashed',
+		'relative mb-10 flex min-h-60 w-full flex-wrap border-4 border-dashed',
 		!tierList.staging.length && 'items-center justify-center'
 	]}
 	use:makeStagingDropZone
 >
 	{#each tierList.staging as item}
-		<TierListItem {item} />
+		<TierListItem {item} onDelete={() => tierList.deleteItem(item.id)} />
 	{:else}
 		<p class="text-center m-auto text-slate-600 text-lg">Paste or drop here an image or URL</p>
 	{/each}
+
+	{#if !!tierList.staging.length}
+		<p class="absolute bottom-full left-1/2 m-auto -translate-x-1/2 -translate-y-2 text-center text-slate-600">
+			Paste or drop here an image or URL
+		</p>
+	{/if}
 </section>

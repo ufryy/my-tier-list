@@ -12,7 +12,7 @@
 	import { setCtxTierList } from '$lib/context';
 	import type { TierListController } from '$lib/data/tier-list.svelte';
 	import type { Item, Tier } from '$lib/data/types';
-	import { readFileAsDataURL } from '$lib/utils';
+	import { readFileAsDataURL } from '$lib/utils/files';
 	import TierRow from './TierRow.svelte';
 
 	type Props = {

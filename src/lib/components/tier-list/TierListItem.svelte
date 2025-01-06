@@ -3,12 +3,14 @@
 	import type { Action } from 'svelte/action';
 
 	import type { Item } from '$lib/data/types';
+	import { toast } from 'svelte-sonner';
 
 	type Props = {
 		item: Item;
+		onDelete: (item: Item) => void;
 	};
 
-	let { item }: Props = $props();
+	let { item, onDelete }: Props = $props();
 
 	let dragging = $state(false);
 
@@ -26,6 +28,11 @@
 			}
 		};
 	};
+
+	function onImageError() {
+		toast.error('Failed to load image');
+		onDelete(item);
+	}
 </script>
 
 <div
@@ -42,6 +49,7 @@
 			crossorigin="anonymous"
 			draggable="false"
 			class="h-full w-full select-none object-cover"
+			onerror={onImageError}
 		/>
 	{:else}
 		{item.label}

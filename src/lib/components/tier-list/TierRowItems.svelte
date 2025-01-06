@@ -4,14 +4,17 @@
 	import { dropTargetForExternal } from '@atlaskit/pragmatic-drag-and-drop/external/adapter';
 	import type { Action } from 'svelte/action';
 
-	import TierListItem from './TierListItem.svelte';
+	import { getCtxTierList } from '$lib/context';
 	import type { Tier } from '$lib/data/types';
+	import TierListItem from './TierListItem.svelte';
 
 	type Props = {
 		tier: Tier;
 	};
 
 	let { tier }: Props = $props();
+
+	const tierList = getCtxTierList();
 
 	let draggedOver = $state(false);
 
@@ -47,6 +50,6 @@
 	use:makeDropZone
 >
 	{#each tier.items as item}
-		<TierListItem {item} />
+		<TierListItem {item} onDelete={() => tierList.deleteItem(item.id)} />
 	{/each}
 </section>
