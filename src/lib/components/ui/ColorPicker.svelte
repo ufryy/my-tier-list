@@ -25,19 +25,27 @@
 		...buttonProps
 	}: Props = $props();
 
+	let button: HTMLButtonElement | null = $state(null);
 	let isOpen = $state(false);
+
+	function toggle(e: Event) {
+		const [target] = e.composedPath();
+		if (target === button) {
+			isOpen = !isOpen;
+		}
+	}
 </script>
 
-<Button {...buttonProps} onclick={() => (isOpen = !isOpen)}>
+<Button {...buttonProps} onclick={toggle} bind:ref={button}>
 	<div class={[$mode === 'dark' && 'dark']} style="--input-size: {colorPickerSize}">
 		<ColorPicker
 			bind:hex
-			bind:isOpen
+			{isOpen}
 			label=""
 			position="responsive"
 			isAlpha={false}
 			isTextInput={false}
-			on:input={(e) => e.detail.hex && onColorChange(e.detail.hex)}
+			on:input={(e) => e.detail.hex && onColorChange(e.detail.hex) && e.stopPropagation()}
 		/>
 	</div>
 	{@render children?.()}
