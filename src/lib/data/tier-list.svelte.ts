@@ -135,7 +135,7 @@ export class TierListController {
 	 * @returns
 	 */
 	deleteItem(itemId: string, entryIndex?: number) {
-		if (entryIndex) {
+		if (entryIndex != null) {
 			const itemIndex = this.#tiers[entryIndex].items.findIndex((i) => i.id === itemId);
 			if (itemIndex === -1) {
 				return;

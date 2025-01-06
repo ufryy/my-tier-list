@@ -12,7 +12,7 @@
 	import { setCtxTierList } from '$lib/context';
 	import type { TierListController } from '$lib/data/tier-list.svelte';
 	import type { Item, Tier } from '$lib/data/types';
-	import { readFileAsDataURL } from '$lib/utils/files';
+	import { compressImage, readFileAsDataURL } from '$lib/utils/files';
 	import TierRow from './TierRow.svelte';
 
 	type Props = {
@@ -68,29 +68,15 @@
 
 					const destTargets = location.current.dropTargets;
 
-					if (!destTargets.length || destTargets[0].data.staging) {
-						for (const file of files) {
-							readFileAsDataURL(file)
-								.then((image) => {
-									tierList.addStagingItem({
-										label: file.name,
-										image
-									});
-								})
-								.catch(fileReadErrorHandler);
-						}
-					} else if (destTargets[0].data.tier) {
-						const tier = destTargets[0].data.tier as Tier;
-						for (const file of files) {
-							readFileAsDataURL(file)
-								.then((image) => {
-									tierList.addItem(tier.id, {
-										label: file.name,
-										image
-									});
-								})
-								.catch(fileReadErrorHandler);
-						}
+					const tier = destTargets[0].data.tier as Tier | undefined;
+					const addFileItem = tier
+						? (file: File, image: string) => tierList.addItem(tier.id, { label: file.name, image })
+						: (file: File, image: string) => tierList.addStagingItem({ label: file.name, image });
+
+					for (const file of files) {
+						getFileURL(file)
+							.then((image) => addFileItem(file, image))
+							.catch(fileReadErrorHandler);
 					}
 				}
 			})
@@ -102,6 +88,11 @@
 			}
 		};
 	};
+
+	async function getFileURL(file: File): Promise<string> {
+		const dataURL = await readFileAsDataURL(file);
+		return compressImage(dataURL);
+	}
 
 	function fileReadErrorHandler() {
 		toast.error('Failed to read file');

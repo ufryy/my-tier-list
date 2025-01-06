@@ -50,7 +50,7 @@
 	style={draggedOver ? `border-color: ${tier.bgColor}` : ''}
 	use:makeDropZone
 >
-	{#each tier.items as item}
+	{#each tier.items as item (item.id)}
 		<TierListItem {item} onDelete={() => tierList.deleteItem(item.id, index)} />
 	{/each}
 </section>

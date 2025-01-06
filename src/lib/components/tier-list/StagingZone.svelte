@@ -6,7 +6,7 @@
 	import type { Action } from 'svelte/action';
 
 	import type { TierListController } from '$lib/data/tier-list.svelte';
-	import { readFileAsDataURL, testImageURL } from '$lib/utils/files';
+	import { compressImage, readFileAsDataURL, testImageURL } from '$lib/utils/files';
 	import { isValidUrl } from '$lib/utils/strings';
 	import TierListItem from './TierListItem.svelte';
 
@@ -16,21 +16,21 @@
 
 	let { tierList }: Props = $props();
 
-	function handlePaste(e: ClipboardEvent) {
+	async function handlePaste(e: ClipboardEvent) {
 		e.preventDefault();
 
 		for (const clipboardItem of e.clipboardData?.files ?? []) {
 			if (clipboardItem.type.startsWith('image/')) {
-				readFileAsDataURL(clipboardItem)
-					.then((dataUrl) => {
-						tierList.addStagingItem({
-							label: clipboardItem.name,
-							image: dataUrl
-						});
-					})
-					.catch(() => {
-						toast.error('Failed to read file');
+				try {
+					const dataURL = await readFileAsDataURL(clipboardItem);
+					const compressedDataURL = await compressImage(dataURL);
+					tierList.addStagingItem({
+						label: clipboardItem.name,
+						image: compressedDataURL
 					});
+				} catch (e) {
+					toast.error('Failed to read file');
+				}
 			}
 		}
 
@@ -85,7 +85,9 @@
 	{/each}
 
 	{#if !!tierList.staging.length}
-		<p class="absolute bottom-full left-1/2 m-auto -translate-x-1/2 -translate-y-2 text-center text-slate-600">
+		<p
+			class="absolute bottom-full left-1/2 m-auto -translate-x-1/2 -translate-y-2 text-center text-slate-600"
+		>
 			Paste or drop here an image or URL
 		</p>
 	{/if}
