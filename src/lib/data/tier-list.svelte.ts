@@ -165,27 +165,80 @@ export class TierListController {
 		this.#save('all');
 	}
 
-	// moveItemFromStaging(item: Item, toTierId: string) {
-	// 	const toEntry = this.#tiers.find((t) => t.id === toTierId);
+	fromJSONString(json: string): boolean {
+		try {
+			const { staging, tiers } = JSON.parse(json);
+			if (!this.isStagingValid(staging)) {
+				console.error('Invalid staging tier:', staging);
+				return false;
+			}
+			if (!this.areTiersValid(tiers)) {
+				console.error('Invalid tiers:', tiers);
+				return false;
+			}
 
-	// 	if (!toEntry) {
-	// 		return;
-	// 	}
+			this.#staging = staging;
+			this.#tiers = tiers;
+			this.#save('all');
+			return true;
+		} catch (err) {
+			console.error('Error parsing JSON:', err);
+			return false;
+		}
+	}
 
-	// 	this.#staging = this.#staging.filter((i) => i.id !== item.id);
-	// 	toEntry.items.push(item);
-	// 	this.#save('all');
-	// }
+	toJSONString(): string {
+		return JSON.stringify({
+			staging: $state.snapshot(this.#staging),
+			tiers: $state.snapshot(this.#tiers)
+		});
+	}
 
-	// moveItemToStaging(item: Item, fromTierId: string) {
-	// 	const fromEntry = this.#tiers.find((t) => t.id === fromTierId);
+	isStagingValid(staging: unknown): boolean {
+		return (
+			typeof staging === 'object' &&
+			staging != null &&
+			'id' in staging &&
+			typeof staging.id === 'string' &&
+			staging.id.length > 0 &&
+			'items' in staging &&
+			Array.isArray(staging.items)
+		);
+	}
 
-	// 	if (!fromEntry) {
-	// 		return;
-	// 	}
-
-	// 	fromEntry.items = fromEntry.items.filter((i) => i.id !== item.id);
-	// 	this.#staging.push(item);
-	// 	this.#save('all');
-	// }
+	areTiersValid(tiers: unknown): boolean {
+		return (
+			Array.isArray(tiers) &&
+			tiers.every(
+				(t: unknown) =>
+					typeof t === 'object' &&
+					t != null &&
+					'id' in t &&
+					typeof t.id === 'string' &&
+					t.id.length > 0 &&
+					'label' in t &&
+					typeof t.label === 'string' &&
+					t.label.length > 0 &&
+					'bgColor' in t &&
+					typeof t.bgColor === 'string' &&
+					t.bgColor.length > 0 &&
+					'textColor' in t &&
+					typeof t.textColor === 'string' &&
+					t.textColor.length > 0 &&
+					'items' in t &&
+					Array.isArray(t.items) &&
+					t.items.every(
+						(i: unknown) =>
+							typeof i === 'object' &&
+							i != null &&
+							'id' in i &&
+							typeof i.id === 'string' &&
+							i.id.length > 0 &&
+							'label' in i &&
+							typeof i.label === 'string' &&
+							i.label.length > 0
+					)
+			)
+		);
+	}
 }

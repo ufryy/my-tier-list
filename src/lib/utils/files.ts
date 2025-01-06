@@ -82,6 +82,27 @@ export function readFileAsDataURL(file: File): Promise<string> {
 	});
 }
 
+export function saveJSONFile(jsonString: string, filename: string): void {
+	const blob = new Blob([jsonString], {
+		type: 'application/json'
+	});
+
+	const link = document.createElement('a');
+	link.download = filename;
+	link.href = URL.createObjectURL(blob);
+	link.dataset.downloadurl = ['text/json', link.download, link.href].join(':');
+
+	const evt = new MouseEvent('click', {
+		view: window,
+		bubbles: true,
+		cancelable: true
+	});
+
+	link.dispatchEvent(evt);
+	URL.revokeObjectURL(link.href);
+	link.remove();
+}
+
 /**
  * Tests the given URL to see if it is a valid image URL.
  *

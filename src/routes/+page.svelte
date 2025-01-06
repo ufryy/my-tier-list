@@ -1,11 +1,9 @@
 <script lang="ts">
 	import StagingZone from '$lib/components/tier-list/StagingZone.svelte';
 	import TierList from '$lib/components/tier-list/TierList.svelte';
-	import AppDB from '$lib/data/db';
-	import { TierListController } from '$lib/data/tier-list.svelte';
+	import { getCtxTierList } from '$lib/context';
 
-	const db = new AppDB();
-	const tierList = new TierListController(db);
+	const tierList = getCtxTierList();
 </script>
 
 <div class="flex flex-col gap-20">

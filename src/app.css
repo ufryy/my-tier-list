@@ -75,4 +75,7 @@
 	.header {
 		@apply bg-background text-foreground;
 	}
+	.btn-header {
+		@apply h-[1.2rem] w-[1.2rem];
+	}
 }

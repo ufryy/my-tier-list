@@ -1,21 +1,83 @@
 <script lang="ts">
-	import Moon from 'lucide-svelte/icons/moon';
-	import Sun from 'lucide-svelte/icons/sun';
-
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Download, Import, Moon, Sun } from 'lucide-svelte';
 	import { toggleMode } from 'mode-watcher';
+
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	import type { TierListController } from '$lib/data/tier-list.svelte';
+	import { saveJSONFile } from '$lib/utils/files';
+	import { toast } from 'svelte-sonner';
+	import type { ChangeEventHandler } from 'svelte/elements';
+
+	type Props = {
+		tierList?: TierListController;
+	};
+
+	let { tierList }: Props = $props();
+
+	let inputRef: HTMLInputElement | undefined = $state();
+
+	const importTierList: ChangeEventHandler<HTMLInputElement> = (e) => {
+		if (!tierList) {
+			toast.error('Application error');
+			return;
+		}
+
+		const { files } = e.currentTarget;
+		if (files && files.length) {
+			const file = files[0];
+			const reader = new FileReader();
+			reader.onload = () => {
+				const data = reader.result as string;
+				const ok = tierList.fromJSONString(data);
+				if (ok) {
+					toast.success('Tier list imported');
+				} else {
+					toast.error('Error importing tier list');
+				}
+				inputRef!.value = '';
+			};
+			reader.onerror = () => {
+				toast.error('Error reading file');
+				inputRef!.value = '';
+			};
+			reader.readAsText(file);
+		}
+	};
+
+	function exportTierList() {
+		if (tierList) {
+			saveJSONFile(tierList.toJSONString(), 'my-tier-list.json');
+		}
+	}
 </script>
 
-<nav class="header sticky top-0 flex items-center justify-between pt-4 pb-8">
+<nav class="header sticky top-0 flex items-center justify-between pb-8 pt-4">
 	<a href="/" class="text-lg font-extrabold">MyTierList</a>
 
-	<div>
+	<div class="flex gap-2">
+		{#if tierList}
+			<label class="{buttonVariants({ variant: 'outline', size: 'default' })} cursor-pointer">
+				<Import class="btn-header" />
+				Import
+				<input
+					type="file"
+					accept="application/json"
+					class="sr-only"
+					onchange={importTierList}
+					bind:this={inputRef}
+				/>
+			</label>
+
+			<Button variant="outline" onclick={exportTierList}>
+				<Download class="btn-header" />
+				Export
+			</Button>
+		{/if}
+
 		<Button onclick={toggleMode} variant="outline" size="icon">
-			<Sun
-				class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-			/>
+			<Sun class="btn-header rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
 			<Moon
-				class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+				class="btn-header absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
 			/>
 			<span class="sr-only">Toggle theme</span>
 		</Button>
