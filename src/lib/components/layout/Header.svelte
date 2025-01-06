@@ -51,10 +51,10 @@
 	}
 </script>
 
-<nav class="header sticky top-0 flex items-center justify-between pb-8 pt-4">
-	<a href="/" class="text-lg font-extrabold">MyTierList</a>
+<nav class="header sticky top-0 flex flex-wrap items-center justify-between gap-4 pb-8 pt-4">
+	<a href="/" class="inline-flex min-h-10 items-center text-lg font-extrabold">MyTierList</a>
 
-	<div class="flex gap-2">
+	<div class="flex flex-wrap gap-2">
 		{#if tierList}
 			<label class="{buttonVariants({ variant: 'outline', size: 'default' })} cursor-pointer">
 				<Import class="btn-header" />
