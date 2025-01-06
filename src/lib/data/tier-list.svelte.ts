@@ -77,8 +77,8 @@ export class TierListController {
 			from === to ||
 			from < 0 ||
 			to < 0 ||
-			from >= this.#tiers.entries.length ||
-			to >= this.#tiers.entries.length
+			from >= this.#tiers.length ||
+			to >= this.#tiers.length
 		) {
 			return;
 		}
