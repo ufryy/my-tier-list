@@ -18,27 +18,27 @@
 	);
 
 	function onEditLabel(label: string) {
-		tierList.editEntry(index, { label });
+		tierList.editTier(index, { label });
 	}
 
 	function onEditBgColor(color: string) {
-		tierList.editEntry(index, { bgColor: color });
+		tierList.editTier(index, { bgColor: color });
 	}
 
 	function onEditTextColor(color: string) {
-		tierList.editEntry(index, { textColor: color });
+		tierList.editTier(index, { textColor: color });
 	}
 
 	function onMoveUp() {
-		tierList.moveEntry(index, index - 1);
+		tierList.moveTier(index, index - 1);
 	}
 
 	function onMoveDown() {
-		tierList.moveEntry(index, index + 1);
+		tierList.moveTier(index, index + 1);
 	}
 
 	function onDelete() {
-		tierList.deleteEntry(index);
+		tierList.deleteTier(index);
 	}
 </script>
 

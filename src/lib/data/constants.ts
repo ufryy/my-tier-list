@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import type { Palette, TierList } from './types';
+import type { Item, Palette, StagingTier, TierList } from './types';
 
 export const basicPalette1: Palette = [
 	['#F24722', '#FFFFFF'],
@@ -22,8 +22,20 @@ export const basicPalette2: Palette = [
 	['#7FD6FF', '#000000']
 ];
 
+export const emptyItem: Item = Object.freeze({
+	id: '',
+	label: ''
+});
+
+export const STAGING_TIER_ID = 'staging';
+
+export const stagingTier: StagingTier = Object.freeze({
+	id: STAGING_TIER_ID,
+	items: []
+});
+
 export const defaultTierList: Omit<TierList, 'id'> = {
-	staging: [],
+	staging: stagingTier,
 	tiers: basicPalette2.map(([bgColor, textColor], index) => ({
 		id: nanoid(),
 		label: index === 0 ? 'S' : String.fromCharCode(65 + index - 1),

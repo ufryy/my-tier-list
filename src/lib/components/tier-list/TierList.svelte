@@ -11,7 +11,7 @@
 
 	import { setCtxTierList } from '$lib/context';
 	import type { TierListController } from '$lib/data/tier-list.svelte';
-	import type { Item, Tier } from '$lib/data/types';
+	import type { Item, TierLike } from '$lib/data/types';
 	import { compressImage, readFileAsDataURL } from '$lib/utils/files';
 	import TierRow from './TierRow.svelte';
 
@@ -38,20 +38,12 @@
 						return;
 					}
 
-					const startData = startTargets[0].data;
-					const destData = destTargets[0].data;
-
-					if (startData.staging) {
-						const tier = destData.tier as Tier;
-						tierList.moveFromStaging(source.data.item as Item, tier.id);
-					} else if (destData.staging) {
-						const tier = startData.tier as Tier;
-						tierList.moveToStaging(source.data.item as Item, tier.id);
-					} else {
-						const startTier = startData.tier as Tier;
-						const destTier = destData.tier as Tier;
-						tierList.moveItem(source.data.item as Item, startTier.id, destTier.id);
+					const from = startTargets[0].data.tier as TierLike;
+					const to = destTargets[0].data.tier as TierLike;
+					if (!from || !to) {
+						return;
 					}
+					tierList.moveItem(source.data.item as Item, from.id, to.id);
 				}
 			}),
 
@@ -59,23 +51,21 @@
 				canMonitor: some(containsFiles, containsURLs),
 				onDragStart: () => preventUnhandled.start(),
 				onDrop: ({ source, location }) => {
+					const destTargets = location.current.dropTargets;
+					const tier = destTargets[0].data.tier as TierLike;
+					if (!tier) {
+						return;
+					}
+
 					const files = getFiles({ source });
 					const urls = getURLs({ source });
-
 					if (!files.length && !urls.length) {
 						return;
 					}
 
-					const destTargets = location.current.dropTargets;
-
-					const tier = destTargets[0].data.tier as Tier | undefined;
-					const addFileItem = tier
-						? (file: File, image: string) => tierList.addItem(tier.id, { label: file.name, image })
-						: (file: File, image: string) => tierList.addStagingItem({ label: file.name, image });
-
 					for (const file of files) {
 						getFileURL(file)
-							.then((image) => addFileItem(file, image))
+							.then((image) => tierList.createItem(tier.id, { label: file.name, image }))
 							.catch(fileReadErrorHandler);
 					}
 				}

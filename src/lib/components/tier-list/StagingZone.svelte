@@ -24,7 +24,7 @@
 				try {
 					const dataURL = await readFileAsDataURL(clipboardItem);
 					const compressedDataURL = await compressImage(dataURL);
-					tierList.addStagingItem({
+					tierList.createItem(tierList.staging.id, {
 						label: clipboardItem.name,
 						image: compressedDataURL
 					});
@@ -38,7 +38,7 @@
 		if (url && isValidUrl(url)) {
 			testImageURL(url).then((ok) => {
 				if (ok) {
-					tierList.addStagingItem({
+					tierList.createItem(tierList.staging.id, {
 						label: '',
 						image: url
 					});
@@ -53,11 +53,11 @@
 		const cleanup = combine(
 			dropTargetForElements({
 				element,
-				getData: () => ({ staging: true })
+				getData: () => ({ tier: $state.snapshot(tierList.staging) })
 			}),
 			dropTargetForExternal({
 				element,
-				getData: () => ({ staging: true })
+				getData: () => ({ tier: $state.snapshot(tierList.staging) })
 			})
 		);
 
@@ -74,17 +74,17 @@
 <section
 	class={[
 		'relative mb-10 flex min-h-60 w-full flex-wrap border-4 border-dashed',
-		!tierList.staging.length && 'items-center justify-center'
+		!tierList.staging.items.length && 'items-center justify-center'
 	]}
 	use:makeStagingDropZone
 >
-	{#each tierList.staging as item}
+	{#each tierList.staging.items as item}
 		<TierListItem {item} onDelete={() => tierList.deleteItem(item.id)} />
 	{:else}
 		<p class="text-center m-auto text-slate-600 text-lg">Paste or drop here an image or URL</p>
 	{/each}
 
-	{#if !!tierList.staging.length}
+	{#if tierList.staging.items.length}
 		<p
 			class="absolute bottom-full left-1/2 m-auto -translate-x-1/2 -translate-y-2 text-center text-slate-600"
 		>

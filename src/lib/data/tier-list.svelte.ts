@@ -1,19 +1,14 @@
 import { nanoid } from 'nanoid';
 
 import type { InsertType, UpdateSpec } from 'dexie';
-import { defaultTierList } from './constants';
+import { defaultTierList, STAGING_TIER_ID, stagingTier } from './constants';
 import type AppDB from './db';
-import type { Item, Tier, TierList } from './types';
-
-export const emptyItem: Item = Object.freeze({
-	id: '',
-	label: ''
-});
+import type { Item, StagingTier, Tier, TierList } from './types';
 
 export class TierListController {
 	#db: AppDB;
 	#id: number = -1;
-	#staging: Item[] = $state([]);
+	#staging: StagingTier = $state({ ...stagingTier });
 	#tiers: Tier[] = $state([]);
 
 	constructor(db: AppDB) {
@@ -59,7 +54,7 @@ export class TierListController {
 		return this.#tiers;
 	}
 
-	addEntry() {
+	createTier() {
 		this.#tiers.push({
 			id: nanoid(),
 			label: 'New Tier',
@@ -70,14 +65,14 @@ export class TierListController {
 		this.#save('tiers');
 	}
 
-	editEntry(index: number, entry: Partial<Omit<Tier, 'id' | 'items'>>) {
+	editTier(index: number, entry: Partial<Omit<Tier, 'id' | 'items'>>) {
 		// @ts-expect-error id and items are not allowed, this is enforced
 		const { id: _, items: __, ..._entry } = entry;
 		this.#tiers[index] = { ...this.#tiers[index], ..._entry };
 		this.#save('tiers');
 	}
 
-	moveEntry(from: number, to: number) {
+	moveTier(from: number, to: number) {
 		if (
 			from === to ||
 			from < 0 ||
@@ -108,24 +103,25 @@ export class TierListController {
 		this.#save('tiers');
 	}
 
-	deleteEntry(index: number) {
-		this.#staging.push(...this.#tiers[index].items);
+	deleteTier(index: number) {
+		this.#staging.items.push(...this.#tiers[index].items);
 		this.#tiers.splice(index, 1);
 		this.#save('all');
 	}
 
-	addStagingItem({ id = nanoid(), label = 'New item', image }: Partial<Item>) {
-		this.#staging.push({ id, label, image });
-		this.#save('staging');
-	}
-
-	addItem(tierId: string, { id = nanoid(), label = 'New item', image }: Partial<Item>) {
-		const entryIndex = this.#tiers.findIndex((t) => t.id === tierId);
-		if (entryIndex === -1) {
-			return;
+	createItem(tierId: string, { label = 'New item', image }: Partial<Omit<Item, 'id'>>) {
+		if (tierId === this.#staging.id) {
+			this.#staging.items.push({ id: nanoid(), label, image });
+			this.#save('staging');
+		} else {
+			const tierIndex = this.#tiers.findIndex((t) => t.id === tierId);
+			if (tierIndex === -1) {
+				console.warn('Tier not found:', tierId);
+				return;
+			}
+			this.#tiers[tierIndex].items.push({ id: nanoid(), label, image });
+			this.#save('tiers');
 		}
-		this.#tiers[entryIndex].items.push({ id, label, image });
-		this.#save('tiers');
 	}
 
 	/**
@@ -143,49 +139,53 @@ export class TierListController {
 			this.#tiers[entryIndex].items.splice(itemIndex, 1);
 			this.#save('tiers');
 		} else {
-			const itemIndex = this.staging.findIndex((i) => i.id === itemId);
+			const itemIndex = this.staging.items.findIndex((i) => i.id === itemId);
 			if (itemIndex === -1) {
 				return;
 			}
-			this.#staging.splice(itemIndex, 1);
+			this.#staging.items.splice(itemIndex, 1);
 			this.#save('staging');
 		}
 	}
 
 	moveItem(item: Item, fromTierId: string, toTierId: string) {
-		const fromTier = this.#tiers.find((t) => t.id === fromTierId);
-		const toTier = this.#tiers.find((t) => t.id === toTierId);
+		const from =
+			fromTierId === STAGING_TIER_ID ? this.#staging : this.#tiers.find((t) => t.id === fromTierId);
+		const to =
+			toTierId === STAGING_TIER_ID ? this.#staging : this.#tiers.find((t) => t.id === toTierId);
 
-		if (!fromTier || !toTier) {
+		if (!from || !to) {
 			return;
 		}
 
-		fromTier.items = fromTier.items.filter((i) => i.id !== item.id);
-		toTier.items.push(item);
-		this.#save('tiers');
-	}
+		console.debug({ from, to });
 
-	moveFromStaging(item: Item, toTierId: string) {
-		const toEntry = this.#tiers.find((t) => t.id === toTierId);
-
-		if (!toEntry) {
-			return;
-		}
-
-		this.#staging = this.#staging.filter((i) => i.id !== item.id);
-		toEntry.items.push(item);
+		from.items = from.items.filter((i) => i.id !== item.id);
+		to.items.push(item);
 		this.#save('all');
 	}
 
-	moveToStaging(item: Item, fromTierId: string) {
-		const fromEntry = this.#tiers.find((t) => t.id === fromTierId);
+	// moveItemFromStaging(item: Item, toTierId: string) {
+	// 	const toEntry = this.#tiers.find((t) => t.id === toTierId);
 
-		if (!fromEntry) {
-			return;
-		}
+	// 	if (!toEntry) {
+	// 		return;
+	// 	}
 
-		fromEntry.items = fromEntry.items.filter((i) => i.id !== item.id);
-		this.#staging.push(item);
-		this.#save('all');
-	}
+	// 	this.#staging = this.#staging.filter((i) => i.id !== item.id);
+	// 	toEntry.items.push(item);
+	// 	this.#save('all');
+	// }
+
+	// moveItemToStaging(item: Item, fromTierId: string) {
+	// 	const fromEntry = this.#tiers.find((t) => t.id === fromTierId);
+
+	// 	if (!fromEntry) {
+	// 		return;
+	// 	}
+
+	// 	fromEntry.items = fromEntry.items.filter((i) => i.id !== item.id);
+	// 	this.#staging.push(item);
+	// 	this.#save('all');
+	// }
 }
