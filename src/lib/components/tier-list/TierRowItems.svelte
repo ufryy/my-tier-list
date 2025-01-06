@@ -10,9 +10,10 @@
 
 	type Props = {
 		tier: Tier;
+		index: number;
 	};
 
-	let { tier }: Props = $props();
+	let { tier, index }: Props = $props();
 
 	const tierList = getCtxTierList();
 
@@ -50,6 +51,6 @@
 	use:makeDropZone
 >
 	{#each tier.items as item}
-		<TierListItem {item} onDelete={() => tierList.deleteItem(item.id)} />
+		<TierListItem {item} onDelete={() => tierList.deleteItem(item.id, index)} />
 	{/each}
 </section>

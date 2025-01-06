@@ -56,5 +56,5 @@
 		{onDelete}
 	/>
 	<div aria-hidden="true" class="border-2"></div>
-	<TierRowItems {tier} />
+	<TierRowItems {tier} {index} />
 </section>

@@ -141,15 +141,15 @@ export class TierListController {
 				return;
 			}
 			this.#tiers[entryIndex].items.splice(itemIndex, 1);
+			this.#save('tiers');
 		} else {
 			const itemIndex = this.staging.findIndex((i) => i.id === itemId);
 			if (itemIndex === -1) {
 				return;
 			}
 			this.#staging.splice(itemIndex, 1);
+			this.#save('staging');
 		}
-
-		this.#save('tiers');
 	}
 
 	moveItem(item: Item, fromTierId: string, toTierId: string) {
