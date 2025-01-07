@@ -89,7 +89,7 @@
 	}
 </script>
 
-<div use:makeDragDropMonitor>
+<div id="tier-list" use:makeDragDropMonitor>
 	{#each tierList.tiers as tier, index (tier.id)}
 		<TierRow {tier} {index} />
 	{/each}

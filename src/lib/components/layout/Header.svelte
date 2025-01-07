@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { Download, Import, Moon, Sun } from 'lucide-svelte';
+	import { toPng } from 'html-to-image';
+	import { Camera, Download, Import, Moon, Sun } from 'lucide-svelte';
 	import { toggleMode } from 'mode-watcher';
 
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import type { TierListController } from '$lib/data/tier-list.svelte';
-	import { saveJSONFile } from '$lib/utils/files';
+	import { saveImageFile, saveJSONFile } from '$lib/utils/files';
 	import { toast } from 'svelte-sonner';
 	import type { ChangeEventHandler } from 'svelte/elements';
 
@@ -49,6 +50,23 @@
 			saveJSONFile(tierList.toJSONString(), 'my-tier-list.json');
 		}
 	}
+
+	function exportTierListAsImage() {
+		const tierListNode = document.getElementById('tier-list');
+		if (tierListNode) {
+			toPng(tierListNode)
+				.then((dataUrl) => {
+					saveImageFile(dataUrl, 'my-tier-list.png');
+				})
+				.catch((err) => {
+					console.error(err);
+					toast.error('Error taking a photo of the tier list');
+				});
+		} else {
+			console.error('Tier list node not found');
+			toast.error('Error taking a photo of the tier list');
+		}
+	}
 </script>
 
 <nav class="header sticky top-0 flex flex-wrap items-center justify-between gap-4 pb-8 pt-4">
@@ -56,6 +74,16 @@
 
 	<div class="flex flex-wrap gap-2">
 		{#if tierList}
+			<Button variant="outline" onclick={exportTierListAsImage}>
+				<Camera class="btn-header" />
+				Take a photo
+			</Button>
+
+			<Button variant="outline" onclick={exportTierList}>
+				<Download class="btn-header" />
+				Export
+			</Button>
+
 			<label class="{buttonVariants({ variant: 'outline', size: 'default' })} cursor-pointer">
 				<Import class="btn-header" />
 				Import
@@ -67,11 +95,6 @@
 					bind:this={inputRef}
 				/>
 			</label>
-
-			<Button variant="outline" onclick={exportTierList}>
-				<Download class="btn-header" />
-				Export
-			</Button>
 		{/if}
 
 		<Button onclick={toggleMode} variant="outline" size="icon">

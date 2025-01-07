@@ -103,6 +103,22 @@ export function saveJSONFile(jsonString: string, filename: string): void {
 	link.remove();
 }
 
+export function saveImageFile(dataURL: string, filename: string, format = "image/png"): void {
+	const link = document.createElement('a');
+	link.download = filename;
+	link.href = dataURL.replace(format, "image/octet-stream");
+	link.dataset.downloadurl = ['image/octet-stream', link.download, link.href].join(':');
+
+	const evt = new MouseEvent('click', {
+		view: window,
+		bubbles: true,
+		cancelable: true
+	});
+
+	link.dispatchEvent(evt);
+	link.remove();
+}
+
 /**
  * Tests the given URL to see if it is a valid image URL.
  *
